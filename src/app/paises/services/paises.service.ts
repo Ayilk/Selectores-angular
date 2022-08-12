@@ -23,12 +23,12 @@ export class PaisesService {
     return this.http.get<PaisSmall[]>(url);
   }
 
-  getPaisPorCode( code: string): Observable<Pais | null> {
+  getPaisPorCode( code: string): Observable<Pais[] | null> {
 
     if( !code){
       return of(null)
     }
     const url = `${this.baseUrl}/alpha/${ code }`;
-    return this.http.get<Pais>( url );
+    return this.http.get<Pais[]>( url );
   }
 }
