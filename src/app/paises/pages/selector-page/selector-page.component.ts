@@ -15,6 +15,8 @@ export class SelectorPageComponent implements OnInit {
   miFormulario: FormGroup = this.fb.group({
     region  : ['', Validators.required],
     pais    : ['', Validators.required],
+    //Esta es la pimer manera manera de bloquer el ultimo selector
+    //frontera: [{value:'', disable: true }, Validators.required]
     frontera: ['', Validators.required]
 
   })
@@ -24,6 +26,9 @@ export class SelectorPageComponent implements OnInit {
   regiones:  string[]    = [];
   paises:    PaisSmall[] = [];
   fronteras: string[] | undefined    = [];
+
+  //UI
+  cargando: boolean = false;
 
 
   constructor(private fb: FormBuilder,
@@ -49,12 +54,16 @@ export class SelectorPageComponent implements OnInit {
   .pipe(
     tap( ( _ ) =>{
       this.miFormulario.get('pais')?.reset('');
+      this.cargando = true
+      //Esta es la segunda manera de bloquear el tercer selector
+      //this.miFormulario.get('frontera')?.disable();
     } ),
     switchMap(region => this.paisesServce.getPaisesPorRegion( region ))
   )
     .subscribe(paises => {
       //console.log(paises);
       this.paises = paises;
+      this.cargando = false;
     })
 
     //Cuando cambie el pais
@@ -63,6 +72,9 @@ export class SelectorPageComponent implements OnInit {
       tap( ( code ) => {
         this.fronteras = [];
         this.miFormulario.get('frontera')?.reset('');
+        this.cargando = true;
+        //Esta es parte de  la segunda manera de bloquear el tercer selector
+        //this.miFormulario.get('frontera')?.enable();
         console.log(code)
       }),
       switchMap( code => 
@@ -72,6 +84,7 @@ export class SelectorPageComponent implements OnInit {
     .subscribe(pais => {
       console.log('pais', pais )
      this.fronteras =  pais ? pais[0].borders : [];
+     this.cargando = false;
     })
   }
 
