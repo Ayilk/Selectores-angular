@@ -26,6 +26,7 @@ export class SelectorPageComponent implements OnInit {
   regiones:  string[]    = [];
   paises:    PaisSmall[] = [];
   fronteras: string[] | undefined    = [];
+  //fronteras: PaisSmall[] = [];
 
   //UI
   cargando: boolean = false;
@@ -68,22 +69,37 @@ export class SelectorPageComponent implements OnInit {
 
     //Cuando cambie el pais
     this.miFormulario.get('pais')?.valueChanges
+    // .pipe(
+    //   tap( () => {
+    //     this.miFormulario.get('frontera')?.reset('');
+    //     this.cargando = true;
+    //   }),
+    //   switchMap( codigo => this.paisesServce.getPaisPorCode( codigo ) ),
+    //   //switchMap( pais => this.paisesServce.getPaisesPorBordes(  pais ? pais[0].borders!: []) )
+    // )
+    // .subscribe( pais => {
+    //    this.fronteras = pais?.borders || [];
+    //  // this.fronteras = paises;
+    //   this.cargando = false;
+    // })
+
     .pipe(
-      tap( ( code ) => {
+      tap( ( ) => {
         this.fronteras = [];
         this.miFormulario.get('frontera')?.reset('');
         this.cargando = true;
         //Esta es parte de  la segunda manera de bloquear el tercer selector
         //this.miFormulario.get('frontera')?.enable();
-        console.log(code)
+        //console.log(code)
       }),
-      switchMap( code => 
-        this.paisesServce.getPaisPorCode( code ))
-    )
+      switchMap( code => this.paisesServce.getPaisPorCode( code )))
+      //switchMap( pais => this.paisesServce.getPaisPorCode(pais?.borders!))
+
     //getPaisPorCode regresa un pais
-    .subscribe(pais => {
-      console.log('pais', pais )
+    .subscribe( pais => {
+      console.log('paises', pais )
      this.fronteras =  pais ? pais[0].borders : [];
+     //this.fronteras = paises
      this.cargando = false;
     })
   }
