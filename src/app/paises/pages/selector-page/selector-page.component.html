@@ -27,7 +27,20 @@
                         [value]="pais.cca3">{{ pais.name.official }}</option>
             </select>
         </div>
-    </div>    
+    </div>   
+    
+    <!-- Fronteras -->
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label">Fronteras:</label>
+            <select class="form-control"
+                    formControlName="frontera">
+                <option value=""> --Seleccione Fronteras --</option>
+                <option *ngFor="let frontera of fronteras" 
+                        [value]="frontera.cca3">{{ frontera.borders }}</option>
+            </select>
+        </div>
+    </div>   
         
         <div class="row">
             <div class="col">

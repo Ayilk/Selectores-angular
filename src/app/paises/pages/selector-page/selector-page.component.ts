@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { switchMap, tap } from 'rxjs';
-import { PaisSmall } from '../../interfaces/paises.interface';
+import { Pais, PaisSmall } from '../../interfaces/paises.interface';
 import { PaisesService } from '../../services/paises.service';
 
 @Component({
@@ -13,8 +13,9 @@ import { PaisesService } from '../../services/paises.service';
 export class SelectorPageComponent implements OnInit {
 
   miFormulario: FormGroup = this.fb.group({
-    region: ['', Validators.required],
-    pais: ['', Validators.required]
+    region  : ['', Validators.required],
+    pais    : ['', Validators.required],
+    frontera: ['', Validators.required]
 
   })
 
@@ -22,6 +23,7 @@ export class SelectorPageComponent implements OnInit {
   //llenar selectores
   regiones: string[] = [];
   paises: PaisSmall[] = [];
+  fronteras: Pais[] = [];
 
 
   constructor(private fb: FormBuilder,
@@ -53,6 +55,22 @@ export class SelectorPageComponent implements OnInit {
     .subscribe(paises => {
       //console.log(paises);
       this.paises = paises;
+    })
+
+    //Cuando cambie el pais
+    this.miFormulario.get('pais')?.valueChanges
+    // .pipe(
+    //   tap( ( pais ) => {
+    //     console.log(pais)
+    //     this.miFormulario.get('frontera')?.reset('');
+    //   }),
+    //   switchMap(pais => this.paisesServce.getPaisPorCode( pais ))
+    // )
+    //   .subscribe(fronteras => {
+    //     //this.fronteras = fronteras
+    //   })
+    .subscribe(codigo => {
+      console.log(codigo)
     })
   }
 
